@@ -1,0 +1,510 @@
+#include<stdio.h>
+ #include<conio.h>
+ #include<stdlib.h>
+ #include <string.h>
+struct student
+ {
+    char student_name[30];    //
+    int roll_no;
+    char Class[10];
+     int year;
+     char vill[20];
+    char phn_no[11];
+    char blood[3];
+    int pps;
+    int physics;
+    int maths;
+    int chemistry;
+    int english;
+    float Cgpa;
+
+};
+
+void addstudent();     //FUNCTION DECLARATION
+void studentrecord();
+void fail();
+void pass();
+void update();
+void searchstudent();
+void del();
+void update();
+
+
+void addstudent()  // TO ADD STUDENT DETAILS
+{
+    char another;
+    char phn[11],ss[30];
+     FILE *fp;
+     int n,i;
+     struct student info;
+   do
+   {
+      system("cls");
+       printf("\t\t\t\t==============================ADD STUDENT INFO==============================\n\n");
+       fp=fopen("HH.txt","a"); //use can give any file name. Give the name with extention or without extention.
+
+          printf("\n\t\t\t\t\tEnter Student Name     : ");
+          fflush(stdin);
+          gets(ss);
+          strcpy(info.student_name,ss);
+          printf("\n\t\t\t\t\tEnter Roll-No       : ");
+          scanf("%d",&info.roll_no);
+          printf("\n\t\t\t\t\tEnter Branch : ");
+          scanf("%s",&info.Class);
+          printf("\n\t\t\t\t\tEnter Address       : ");
+          scanf("%s",&info.vill);
+          printf("\n\t\t\t\t\tEnter the marks of pps :");
+          scanf("%d",&info.pps);
+          printf("\n\t\t\t\t\tEnter the marks of physics :");
+          scanf("%d",&info.physics);
+          printf("\n\t\t\t\t\tEnter the marks of chemistry :");
+          scanf("%d",&info.chemistry);
+          printf("\n\t\t\t\t\tEnter the marks of maths :");
+          scanf("%d",&info.maths);
+          printf("\n\t\t\t\t\tEnter the marks of english :");
+          scanf("%d",&info.english);
+          info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0; //
+          printf("\n\t\t\tEnter phone no      : ");
+           fflush(stdin);
+          gets(phn);
+          strcpy(info.phn_no,phn);
+          printf("\n\t\t\tBlood Group         : ");
+           fflush(stdin);
+          scanf("%s",&info.blood);
+          printf("\n\t\t\tYear                : ");
+           fflush(stdin);
+          scanf("%d",&info.year);
+
+
+
+
+      if(fp==NULL){
+        fprintf(stderr,"can't open file");
+    }else{
+        printf("\t\t\t==============================Record stored successfully==============================\n");
+    }
+
+    fwrite(&info, sizeof(info), 1, fp);  //
+    fclose(fp);
+    printf("\n\t\t\t\t\t\t --------------------------------------\n ");
+    printf("\t\t\t\t\t\t Do you want to add another record?(y/n) : ");
+    printf("\n\t\t\t\t\t\t --------------------------------------\n ");
+    scanf("%s",&another);
+    system("cls");
+   }while(another=='y'||another=='Y');
+}
+void studentrecord()  // TO DISPLAY STUDENTS RECORD
+ {
+       system("cls");
+     FILE *fp;
+    struct student info;
+    fp=fopen("HH.txt","r");
+     printf("\n\n\t\t\t\t==============================STUDENTS RECORD==============================\n");
+    if(fp==NULL){
+        fprintf(stderr,"can't open file\n");
+        exit(0);
+    }
+
+        printf("_____________________________________________________________________________________________________________________________________________\n");
+        printf("%-15s %-15s %-15s %-15s %-10s %9s %-13s %-13s %-10s %-10s %-10s \n","NAME","ROLL NO.","BRANCH","ADDRESS","PHONE NO.","PHYSICS","CHEMISTRY","MATHS","PPS","ENGLISH","CGPA");
+        while(fread(&info,sizeof(struct student),1,fp)){
+         printf("\n_____________________________________________________________________________________________________________________________________________\n");
+          printf("%-16s%-16d%-16s%-16s%-16s%-10d%-10d%-14d%-11d%-10d%-5.2f",info.student_name,info.roll_no,info.Class,info.vill,info.phn_no,info.physics,info.chemistry,info.maths,info.pps,info.english,info.Cgpa);
+
+         }
+         printf("\n\n");
+          printf("_____________________________________________________________________________________________________________________________________________\n");
+        fclose(fp);
+
+  }
+void searchstudent()
+{
+       struct student info;
+      FILE *fp;
+      int roll_no,found=0;
+
+    fp=fopen("HH.txt","r");
+    printf("\n\t\t\t\t==============================SEARCH STUDENTS RECORD==============================\n\n");
+    printf("\t\t\tEnter the roll no : ");
+
+    scanf("%d",&roll_no);
+     printf("_____________________________________________________________________________________________________________________________________________\n");
+         printf("%-15s %-15s %-15s %-15s %-10s %9s %-13s %-13s %-10s %-10s %-10s \n","NAME","ROLL NO.","BRANCH","ADDRESS","PHONE NO.","PHYSICS","CHEMISTRY","MATHS","PPS","ENGLISH","CGPA");
+
+    while(fread(&info,sizeof(struct student),1,fp)>0){
+
+        if(info.roll_no==roll_no){
+        found=1;
+
+         printf("_____________________________________________________________________________________________________________________________________________\n");
+          printf("%-16s%-16d%-16s%-16s%-16s%-10d%-10d%-14d%-11d%-10d%-5.2f",info.student_name,info.roll_no,info.Class,info.vill,info.phn_no,info.physics,info.chemistry,info.maths,info.pps,info.english,info.Cgpa);
+
+         }
+
+    }
+
+    if(found==0){
+       printf("\n\t\t\t==============================Record not found==============================\n");
+    }
+ printf("\n\n");
+          printf("_____________________________________________________________________________________________________________________________________________\n");
+    fclose(fp);
+   // getch();
+
+}
+void fail()
+{
+    struct student info;
+
+  printf("\n\t\t\t==============================FAILED STUDENTS==============================\n");
+  FILE *fp=NULL;
+  fp=fopen("HH.txt","r");
+  printf("\n_____________________________________________________________________________________________________________________________________________\n");
+  printf("%-15s %-15s %-15s %-15s %-10s %9s %-13s %-13s %-10s %-10s %-10s \n","NAME","ROLL NO.","BRANCH","ADDRESS","PHONE NO.","PHYSICS","CHEMISTRY","MATHS","PPS","ENGLISH","CGPA");
+  while(fread(&info,sizeof(info),1,fp))
+  {
+   if(info.pps<35 || info.physics<35 || info.chemistry<35 || info.maths<35 || info.english<35)
+   {
+   printf("\n_____________________________________________________________________________________________________________________________________________\n");
+          printf("%-16s%-16d%-16s%-16s%-16s%-10d%-10d%-14d%-11d%-10d%-5.2f",info.student_name,info.roll_no,info.Class,info.vill,info.phn_no,info.physics,info.chemistry,info.maths,info.pps,info.english,info.Cgpa);
+   }
+
+  }
+  printf("\n_____________________________________________________________________________________________________________________________________________\n");
+}
+void pass()
+{
+    struct student info;
+  printf("\n\t\t\t\t==============================PASSED STUDENTS==============================");
+  FILE *fp=NULL;
+  fp=fopen("HH.txt","r");
+  printf("\n_____________________________________________________________________________________________________________________________________________\n");
+  printf("%-15s %-15s %-15s %-15s %-10s %9s %-13s %-13s %-10s %-10s %-10s \n","NAME","ROLL NO.","BRANCH","ADDRESS","PHONE NO.","PHYSICS","CHEMISTRY","MATHS","PPS","ENGLISH","CGPA");
+  while(fread(&info,sizeof(info),1,fp))
+  {
+
+   if(info.pps>=35 && info.physics>=35 && info.chemistry>=35 && info.maths>=35 && info.english>=35)
+   {
+   {
+   printf("\n_____________________________________________________________________________________________________________________________________________\n");
+          printf("%-16s%-16d%-16s%-16s%-16s%-10d%-10d%-14d%-11d%-10d%-5.2f",info.student_name,info.roll_no,info.Class,info.vill,info.phn_no,info.physics,info.chemistry,info.maths,info.pps,info.english,info.Cgpa);
+   }
+
+  }
+}
+printf("\n_____________________________________________________________________________________________________________________________________________\n");
+
+}
+void update()
+{
+  FILE *fp;
+   struct student info;
+    int ch,roll,temp=0;
+    printf("\n\t\t\t============================== Update Student ==============================\n\n");
+    printf("\n\t\t\t\t1. Update Student Name\n\t\t\t\t2. Update class\n\t\t\t\t3. Update Address\n\t\t\t\t4. Update Phone number\n\t\t\t\t5. Update PPS Marks\n\t\t\t\t6. Update Physics Marks\n\t\t\t\t7. Update Chemistry Marks\n\t\t\t\t8. Update Maths Marks\n\t\t\t\t9. Update English Marks\n\n\n\n\n\n");
+    printf("--------->Enter your choice : ");
+    scanf("%d",&ch);
+    fp=fopen("HH.txt","r+");
+    if(ch==1){
+        printf("\n--------->Enter Roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no)
+            {
+                temp=1;
+                printf("\n--------->Old Student name = %s\n",info.student_name);
+                printf("--------->Enter new Student name = ");
+                fflush(stdin);
+                gets(info.student_name);
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!!! Student Name updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!!! Roll No. not Found !!!!");
+    }
+    else if(ch==2)
+    {
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                temp=1;
+                printf("\n--------->Old Class = %s",info.Class);
+                printf("\n--------->Enter new Class = ");
+                scanf("%s",&info.Class);
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! Class updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+    }
+    else if(ch==3){
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                temp=1;
+                printf("\n--------->Old Address = %s",info.vill);
+                printf("\n--------->Enter new Adress = ");
+                scanf("%s",&info.vill);
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!!Address updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!!Roll not Found !!!!");
+    }
+    else if(ch==4){
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                temp=1;
+                printf("\n--------->Old Phone No. = %d",info.phn_no);
+                printf("\n--------->Enter new Phone No. = ");
+                fflush(stdin);
+                gets(info.phn_no);
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! Phone updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+
+    }
+    else if(ch==5)
+    {
+        printf("\n--------->Enter Roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no)
+            {
+                temp=1;
+                printf("\n--------->Old PPS marks = %d\n",info.pps);
+                printf("E--------->nter new PPS marks = ");
+                scanf("%d",&info.pps);
+                info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0;
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! PPS Marks updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+    }
+    else if(ch==6)
+    {
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                printf("\n--------->Old Physics marks = %d\n",info.physics);
+                printf("--------->Enter new Physics marks = ");
+                scanf("%d",&info.physics);
+                info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0;
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! Physics Marks updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+    }
+    else if(ch==7){
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                printf("\n--------->Old Chemistry marks = %d\n",info.chemistry);
+                printf("--------->Enter new Chemistry marks = ");
+
+                scanf("%d",&info.chemistry);
+                info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0;
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!!Chemistry Marks updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!!Roll not Found !!!!");
+    }
+    else if(ch==8){
+        printf("\n--------->Enter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                               printf("\n--------->Old Maths marks = %d\n",info.maths);
+                printf("--------->Enter new Maths marks = ");
+                scanf("%d",&info.maths);
+                info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0;
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! Maths Marks updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+
+    }
+     else if(ch==9)
+     {
+        printf("\nEnter roll No. : ");
+        scanf("%d",&roll);
+        while(fread(&info,sizeof(info),1,fp)==1){
+            if(roll==info.roll_no){
+                               printf("\n--------->Old English marks = %d\n",info.english);
+                printf("--------->Enter new English marks = ");
+                fflush(stdin);
+                scanf("%d",&info.english);
+                info.Cgpa=(info.pps+info.physics+info.chemistry+info.maths+info.english)/50.0;
+                fseek(fp,-sizeof(info),1);
+                fwrite(&info,sizeof(info),1,fp);
+                fclose(fp);
+                break;
+            }
+        }
+        if(temp==1)
+            printf("\n\t\t\t\t!!! English Marks updated successfully !!!!");
+        else
+            printf("\n\t\t\t\t!!! Roll No. not Found !!!!");
+
+    }
+    }
+
+void del(){
+      struct student info;
+      FILE *fp, *fp1;
+
+
+    int roll_no,found=0;
+
+       printf("\t\t\t==============================DELETE STUDENTS RECORD==============================\n\n\n");
+    fp=fopen("HH.txt","r");
+    fp1=fopen("temp.txt","w");
+    printf("\t\t\t\tEnter the roll no : ");
+    scanf("%d",&roll_no);
+    if(fp==NULL){
+         fprintf(stderr,"can't open file\n");
+         exit(0);
+      }
+
+    while(fread(&info,sizeof(struct student),1,fp)){
+        if(info.roll_no == roll_no){
+
+            found=1;
+
+        }else{
+           fwrite(&info,sizeof(struct student),1,fp1);
+        }
+
+    }
+     fclose(fp);
+     fclose(fp1);
+
+    if(!found){
+          printf("\n\t\t\t\tRecord not found\n");
+        }
+      if(found){
+    remove("HH.txt");
+        rename("temp.txt","HH.txt");
+
+        printf("\n\t\t\t\tRecord deleted succesfully\n");
+        }
+}
+int main()
+{
+int choice;
+
+    A:
+    system("cls");
+    printf("\t\t\t==============================STUDENT DATABASE MANAGEMENT SYSTEM==============================");
+    printf("\n\n\n\t\t\t\t     1. Add Student\n");
+    printf("\t\t\t\t     2. Students Records\n");
+    printf("\t\t\t\t     3. Search Student\n");
+    printf("\t\t\t\t     4. Delete Student\n");
+    printf("\t\t\t\t     5. Failed Students\n");
+    printf("\t\t\t\t     6. Pass Students\n");
+    printf("\t\t\t\t     7. Update Details\n");
+    printf("\t\t\t\t     8. Exit\n");
+    printf("\t\t\t\t    ------------------------\n");
+printf("\t\t\t\t\tEnter choice = \n");
+ printf("\t\t\t\t    ------------------------\n");
+scanf("%d",&choice);
+  system("cls");
+switch(choice)
+{
+    case 1:
+    system("cls");
+     addstudent();
+      system("cls");
+   break;
+    case 2:
+     system("cls");
+   studentrecord();
+
+    break;
+    case 3:
+     system("cls");
+    searchstudent();
+    break;
+    case 4:
+     system("cls");
+    del();
+    break;
+    case 5:
+     system("cls");
+    fail();
+    break;
+    case 6:
+     system("cls");
+    pass();
+    break;
+    case 8:
+     system("cls");
+    printf("\n\n\t\t\t==============================THANK YOU FOR USING THIS SOFTWARE==============================\n\n");
+    break;
+    case 7:
+    update();
+    break;
+
+}
+printf("\n\t\t\t---------->Enter 0 to go to the main menu.......");
+printf("\n\n\t\t\t---------->Enter 1 for exit......");
+int a;
+scanf("%d",&a);
+if(a==0){
+goto A;}
+else
+printf("\n\n\t\t\t==============================THANK YOU FOR USING THIS SOFTWARE==============================\n\n");
+return 0;
+}
